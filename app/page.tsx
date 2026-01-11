@@ -5,8 +5,15 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#0d7377] to-[#095456] text-white py-24 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section
+        className="relative text-white py-24 px-4 bg-cover bg-center"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1527066236128-2ff79f7b9705?auto=format&fit=crop&w=1920&q=80')`,
+        }}
+      >
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0d7377]/85 to-[#095456]/90" />
+        <div className="max-w-6xl mx-auto relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             SHIRE Lab
           </h1>
