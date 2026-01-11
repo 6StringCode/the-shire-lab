@@ -50,7 +50,7 @@ export default async function ProjectsPage() {
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Current Projects</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            {activeProjects.map((project) => (
+            {activeProjects.map((project: any) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </div>
@@ -60,7 +60,7 @@ export default async function ProjectsPage() {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Past Projects</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pastProjects.map((project) => (
+            {pastProjects.map((project: any) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </div>
