@@ -1,12 +1,45 @@
 import PersonCard from "@/components/PersonCard";
-import { people, alumni } from "@/lib/data";
+import { client } from "@/sanity/lib/client";
+import { peopleQuery, alumniQuery } from "@/sanity/lib/queries";
+import { people as fallbackPeople, alumni as fallbackAlumni } from "@/lib/data";
 
 export const metadata = {
   title: "People | SHIRE Lab",
   description: "Meet the current team and alumni of the SHIRE Lab at the University of Miami.",
 };
 
-export default function PeoplePage() {
+export const revalidate = 60;
+
+async function getPeople() {
+  try {
+    const [current, alum] = await Promise.all([
+      client.fetch(peopleQuery),
+      client.fetch(alumniQuery),
+    ]);
+
+    if (current && current.length > 0) {
+      const mapPerson = (p: any) => ({
+        id: p._id,
+        name: p.name,
+        role: p.role,
+        degree: p.degree,
+        description: p.description,
+        email: p.email,
+        isCurrent: p.isCurrent,
+      });
+      return {
+        people: current.map(mapPerson),
+        alumni: alum.map(mapPerson),
+      };
+    }
+    return { people: fallbackPeople, alumni: fallbackAlumni };
+  } catch {
+    return { people: fallbackPeople, alumni: fallbackAlumni };
+  }
+}
+
+export default async function PeoplePage() {
+  const { people, alumni } = await getPeople();
   return (
     <div className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
@@ -22,7 +55,7 @@ export default function PeoplePage() {
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Current Team</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            {people.map((person) => (
+            {people.map((person: any) => (
               <PersonCard key={person.id} person={person} variant="current" />
             ))}
           </div>
@@ -66,7 +99,7 @@ export default function PeoplePage() {
             research as students.
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {alumni.map((person) => (
+            {alumni.map((person: any) => (
               <PersonCard key={person.id} person={person} variant="alumni" />
             ))}
           </div>

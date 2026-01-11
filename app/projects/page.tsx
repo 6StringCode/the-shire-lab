@@ -1,14 +1,38 @@
 import ProjectCard from "@/components/ProjectCard";
-import { projects } from "@/lib/data";
+import { client } from "@/sanity/lib/client";
+import { projectsQuery } from "@/sanity/lib/queries";
+import { projects as fallbackProjects } from "@/lib/data";
 
 export const metadata = {
   title: "Projects | SHIRE Lab",
   description: "Research projects at the SHIRE Lab focusing on environmental health, water insecurity, and health disparities.",
 };
 
-export default function ProjectsPage() {
-  const activeProjects = projects.filter((p) => p.isActive);
-  const pastProjects = projects.filter((p) => !p.isActive);
+export const revalidate = 60;
+
+async function getProjects() {
+  try {
+    const projects = await client.fetch(projectsQuery);
+    if (projects && projects.length > 0) {
+      return projects.map((p: any) => ({
+        id: p._id,
+        title: p.title,
+        description: p.description,
+        partners: p.partners,
+        focusAreas: p.focusAreas,
+        isActive: p.isActive,
+      }));
+    }
+    return fallbackProjects;
+  } catch {
+    return fallbackProjects;
+  }
+}
+
+export default async function ProjectsPage() {
+  const projects = await getProjects();
+  const activeProjects = projects.filter((p: any) => p.isActive);
+  const pastProjects = projects.filter((p: any) => !p.isActive);
 
   return (
     <div className="py-12 px-4">
