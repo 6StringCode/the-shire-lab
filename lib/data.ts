@@ -1,3 +1,24 @@
+/**
+ * FALLBACK DATA FILE
+ *
+ * This file contains static fallback data that is used when:
+ * - Sanity CMS is unavailable or misconfigured
+ * - The Sanity dataset is empty
+ * - There's a network error fetching from Sanity
+ *
+ * PRIMARY CONTENT SOURCE: Sanity CMS (https://www.sanity.io/manage)
+ * All content should be managed via the Sanity Studio at /studio
+ *
+ * TO REMOVE THIS FALLBACK:
+ * 1. Ensure all content exists in Sanity and is working correctly
+ * 2. Remove the fallback imports from:
+ *    - app/news/page.tsx
+ *    - app/people/page.tsx
+ *    - app/projects/page.tsx
+ * 3. Update those files to handle empty Sanity responses gracefully
+ * 4. Delete this file (lib/data.ts)
+ */
+
 import { NewsItem } from "@/components/NewsCard";
 import { Person } from "@/components/PersonCard";
 import { Project } from "@/components/ProjectCard";
