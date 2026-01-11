@@ -1,13 +1,36 @@
 import NewsCard from "@/components/NewsCard";
-import { newsItems } from "@/lib/data";
+import { client } from "@/sanity/lib/client";
+import { newsQuery } from "@/sanity/lib/queries";
+import { newsItems as fallbackNews } from "@/lib/data";
 
 export const metadata = {
   title: "News | SHIRE Lab",
   description: "Latest research updates and news from the SHIRE Lab at the University of Miami.",
 };
 
-export default function NewsPage() {
-  const sortedNews = [...newsItems].sort(
+export const revalidate = 60; // Revalidate every 60 seconds
+
+async function getNews() {
+  try {
+    const news = await client.fetch(newsQuery);
+    if (news && news.length > 0) {
+      return news.map((item: any) => ({
+        id: item._id,
+        date: item.date,
+        title: item.title,
+        description: item.description,
+        link: item.link,
+      }));
+    }
+    return fallbackNews;
+  } catch {
+    return fallbackNews;
+  }
+}
+
+export default async function NewsPage() {
+  const newsData = await getNews();
+  const sortedNews = [...newsData].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
