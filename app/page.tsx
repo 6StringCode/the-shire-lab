@@ -12,7 +12,7 @@ export default function Home() {
         }}
       >
         {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0d7377]/85 to-[#095456]/90" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0d7377]/70 to-[#095456]/70" />
         <div className="max-w-6xl mx-auto relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             SHIRE Lab
